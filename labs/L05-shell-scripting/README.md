@@ -118,7 +118,7 @@ Afterward, restore the title check to:
 
 This leaves the test validating the correct title and the configured page message.
 
-### Task 3 — Make deployment run the test first
+### Task 3 — Modify deploy.sh so deployment fails when the test fails.
 
 Modify `deploy.sh` to run `test.sh` **after checking that the build artifact exists but before creating the deployment directory or copying the file**.
 
