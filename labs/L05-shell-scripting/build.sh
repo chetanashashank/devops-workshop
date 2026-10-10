@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source labs/L05-shell-scripting/config.sh
+
 OUTPUT_DIR="labs/L05-shell-scripting/build/site"
 PAGE_TITLE="Workshop Demo"
-PAGE_MESSAGE="Built by the L05 shell script."
 
 mkdir -p "$OUTPUT_DIR"
 cat > "$OUTPUT_DIR/index.html" <<EOF
@@ -13,4 +14,5 @@ cat > "$OUTPUT_DIR/index.html" <<EOF
   <body><h1>${PAGE_TITLE}</h1><p>${PAGE_MESSAGE}</p></body>
 </html>
 EOF
+
 printf 'Build complete: %s/index.html\n' "$OUTPUT_DIR"
