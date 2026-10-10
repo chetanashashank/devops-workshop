@@ -9,6 +9,8 @@ if [[ ! -f "$ARTIFACT" ]]; then
   exit 1
 fi
 
+bash test.sh
+
 mkdir -p "$DESTINATION"
 cp "$ARTIFACT" "$DESTINATION/index.html"
 printf 'Local deployment complete: %s/index.html\n' "$DESTINATION"

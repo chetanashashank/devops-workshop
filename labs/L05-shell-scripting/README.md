@@ -1,179 +1,124 @@
-# L05: Shell Scripting — Build, Test, and Deploy
+# L05: Shell Script Basics — Build, Test, Deploy
 
-## Learning objective
+| | |
+|---|---|
+| **Duration** | 25 minutes |
+| **Prerequisites** | L01 Linux navigation, L03 permissions, and a Bash terminal |
+| **Learning objective** | Write and run three shell scripts, use variables and conditions, and understand exit codes. |
 
-Use Bash scripts to build a simple HTML page, validate the generated file, and deploy it only after the required checks pass.
+## Scenario
 
-**Duration:** Approximately 30–40 minutes
+You are preparing a tiny web page for release. One script builds it, one checks it, and one copies it to a local deployment folder. A configuration file stores the page message so both the build and test scripts can use the same value. This is a safe local demonstration; it does not publish a website.
 
-## Lab structure
+## Key ideas (3 minutes)
 
-Run all commands from the **repository root**.
+- A shell script is a text file containing commands. `#!/usr/bin/env bash` selects Bash.
+- Variables hold values. Use `"$NAME"` to safely use a variable.
+- `source config.sh` loads variables from a configuration file into the current shell.
+- An `if` statement can check whether a file exists with `[[ -f "$FILE" ]]`.
+- Exit code `0` means success. A non-zero exit code means failure.
+- `bash script.sh` runs a script. `chmod +x script.sh` makes it executable.
+- `&&` runs the next command only if the previous command succeeds.
 
-```text
-labs/
-└── L05-shell-scripting/
-    ├── config.sh
-    ├── build.sh
-    ├── test.sh
-    ├── deploy.sh
-    ├── build/
-    │   └── site/
-    │       └── index.html
-    └── deployed/
-        └── index.html
-```
+## Files used in this lab
 
-The `build/` and `deployed/` directories are created when the scripts run.
+- `config.sh` — stores `PAGE_MESSAGE`.
+- `build.sh` — sources `config.sh` and uses `PAGE_MESSAGE` to generate the HTML page.
+- `test.sh` — initially checks only that the generated file exists and the title is correct.
+- `deploy.sh` — copies the generated page to the local deployment folder. In this exercise, modify it to run tests before copying.
 
-## Starter files
+## Steps (17 minutes)
 
-### `config.sh`
+Run these commands from the repository root.
 
-This file contains the message that the build script inserts into the HTML page.
-
-```bash
-#!/usr/bin/env bash
-PAGE_MESSAGE="Built by the L05 shell script."
-```
-
-### `build.sh`
-
-The build script reads the configuration and generates the HTML page.
+### 1. Build the page (5 min)
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-source labs/L05-shell-scripting/config.sh
-
-OUTPUT_DIR="labs/L05-shell-scripting/build/site"
-PAGE_TITLE="Workshop Demo"
-
-mkdir -p "$OUTPUT_DIR"
-cat > "$OUTPUT_DIR/index.html" <<EOF
-<!doctype html>
-<html lang="en">
-  <head><meta charset="utf-8"><title>${PAGE_TITLE}</title></head>
-  <body><h1>${PAGE_TITLE}</h1><p>${PAGE_MESSAGE}</p></body>
-</html>
-EOF
-
-printf 'Build complete: %s/index.html\n' "$OUTPUT_DIR"
+bash labs/L05-shell-scripting/build.sh
+cat labs/L05-shell-scripting/build/site/index.html
 ```
 
-### `test.sh` — starter version
+The build script creates an HTML file under `build/site/`. The page message comes from `config.sh`.
 
-Initially, this test checks that the generated HTML exists and contains the expected title.
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
-
-if [[ ! -f "$ARTIFACT" ]]; then
-  printf 'Test failed: run build.sh first.\n' >&2
-  exit 1
-fi
-
-if ! grep -q '<title>Workshop Demo</title>' "$ARTIFACT"; then
-  printf 'Test failed: expected title was not found.\n' >&2
-  exit 1
-fi
-
-printf 'Test passed: page exists and title is correct.\n'
-```
-
-### `deploy.sh` — starter version
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
-DESTINATION="labs/L05-shell-scripting/deployed"
-
-if [[ ! -f "$ARTIFACT" ]]; then
-  printf 'Deploy failed: run build.sh first.\n' >&2
-  exit 1
-fi
-
-mkdir -p "$DESTINATION"
-cp "$ARTIFACT" "$DESTINATION/index.html"
-printf 'Local deployment complete: %s/index.html\n' "$DESTINATION"
-```
-
-## Student tasks
-
-### Task 1 — Change the page message
-
-1. Open `config.sh`.
-2. Change `PAGE_MESSAGE` to a new message.
-3. Run the build script:
-
-   ```bash
-   bash labs/L05-shell-scripting/build.sh
-   ```
-
-4. Inspect the generated HTML:
-
-   ```bash
-   cat labs/L05-shell-scripting/build/site/index.html
-   ```
-
-Confirm that the new message appears in the page.
-
-### Task 2 — Add a message check to `test.sh`
-
-Update `test.sh` so it also checks that the configured message appears in the generated HTML.
-
-Hints:
-- Source `labs/L05-shell-scripting/config.sh`.
-- Use `grep -Fq "$PAGE_MESSAGE" "$ARTIFACT"`.
-- Print the final success message only after all checks pass.
-
-Run the test:
+### 2. Test the page (5 min)
 
 ```bash
 bash labs/L05-shell-scripting/test.sh
 ```
 
-### Task 3 — Intentionally make the test fail
+The initial test script checks that the file exists and contains the expected title. In the student tasks, you will add a check for the page message.
 
-To demonstrate a failed test, change the expected title in `test.sh` from:
+### 3. Deploy the page locally (5 min)
+
+```bash
+bash labs/L05-shell-scripting/deploy.sh
+cat labs/L05-shell-scripting/deployed/index.html
+```
+
+The deploy script copies the page to a local `deployed/` folder. You will modify it so that it runs the test first and stops if the test fails. This is only a simulation.
+
+### 4. Run stages in order (2 min)
+
+After completing the tasks, run:
+
+```bash
+bash labs/L05-shell-scripting/build.sh && \
+bash labs/L05-shell-scripting/test.sh && \
+bash labs/L05-shell-scripting/deploy.sh
+```
+
+`&&` runs the next command only if the previous command succeeds.
+
+## Student tasks
+
+1. Change `PAGE_MESSAGE` in `config.sh` and rebuild the HTML page.
+2. change the page title in test.sh so that the condition fails and test fails.
+3. Modify `deploy.sh` so deployment fails when the test fails. Test this by temporarily changing `PAGE_MESSAGE` in `config.sh` to a new value and deliberately making the expected message in `test.sh` incorrect. Run `deploy.sh` and confirm that the test fails and the deployment copy does not run. Restore the correct expected value afterward.
+
+## Answer guide (for reference)
+
+These are suggested answers to help students check their work.
+
+### Task 1 — Change the page message
+
+In `config.sh`, update the shared variable, for example:
+
+```bash
+PAGE_MESSAGE="Welcome to our beginner workshop!"
+```
+
+Then rebuild the page:
+
+```bash
+bash labs/L05-shell-scripting/build.sh
+```
+
+### Task 2 — Check the page message and demonstrate a failed test
+
+
+To demonstrate a test failure, **change only the expected title string in the existing title check** from:
 
 ```bash
 '<title>Workshop Demo</title>'
 ```
 
-to this incorrect title:
+to:
 
 ```bash
 '<title>Workshop</title>'
 ```
 
-Then run:
+Run `test.sh` again. It should print `Test failed: expected title was not found.` because the generated page title is still `Workshop Demo`. You do not need to change `config.sh` or the message check for this demonstration.
 
-```bash
-bash labs/L05-shell-scripting/test.sh
-```
-
-Expected output:
-
-```text
-Test failed: expected title was not found.
-```
-
-This failure is intentional: the generated HTML contains `<title>Workshop Demo</title>`, not `<title>Workshop</title>`.
-
-After demonstrating the failure, **restore** the correct expected title:
+Afterward, restore the title check to:
 
 ```bash
 '<title>Workshop Demo</title>'
 ```
 
-Do not leave the test with the incorrect title.
+This leaves the test validating the correct title and the configured page message.
+
+### Task 3 — Stop deployment when the test fails
 
 ### Task 4 — Make deployment run the test first
 
@@ -187,73 +132,10 @@ bash labs/L05-shell-scripting/test.sh
 
 Because `deploy.sh` uses `set -euo pipefail`, a failing test causes deployment to stop before the copy command.
 
-### Task 5 — Demonstrate deployment protection
 
-1. Build the page.
-2. Temporarily change the expected title in `test.sh` to `<title>Workshop</title>`.
-3. Run `deploy.sh`.
-4. Observe that the test fails and the script stops before copying the artifact.
-5. Restore `<title>Workshop Demo</title>`.
-6. Run the build, test, and deploy scripts again to confirm the successful workflow.
+## Final execution order
 
-Note: this prevents a new copy from being made when the test fails. It does not automatically remove a file that was deployed during an earlier successful run.
-
-## Answer guide
-
-### Updated `test.sh`
-
-This version checks the artifact, title, and configured message:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-source labs/L05-shell-scripting/config.sh
-
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
-
-if [[ ! -f "$ARTIFACT" ]]; then
-    printf 'Test failed: run build.sh first.\n' >&2
-    exit 1
-fi
-
-if ! grep -Fq '<title>Workshop Demo</title>' "$ARTIFACT"; then
-    printf 'Test failed: expected title was not found.\n' >&2
-    exit 1
-fi
-
-if ! grep -Fq "$PAGE_MESSAGE" "$ARTIFACT"; then
-    printf 'Test failed: expected message was not found.\n' >&2
-    exit 1
-fi
-
-printf 'Test passed: page exists, title is correct, and message matches.\n'
-```
-
-### Updated `deploy.sh`
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
-DESTINATION="labs/L05-shell-scripting/deployed"
-
-if [[ ! -f "$ARTIFACT" ]]; then
-  printf 'Deploy failed: run build.sh first.\n' >&2
-  exit 1
-fi
-
-bash labs/L05-shell-scripting/test.sh
-
-mkdir -p "$DESTINATION"
-cp "$ARTIFACT" "$DESTINATION/index.html"
-printf 'Local deployment complete: %s/index.html\n' "$DESTINATION"
-```
-
-### Final execution order
-
-Run each command from the repository root:
+After restoring the correct test check, run these commands from the repository root:
 
 ```bash
 bash labs/L05-shell-scripting/build.sh
@@ -261,7 +143,20 @@ bash labs/L05-shell-scripting/test.sh
 bash labs/L05-shell-scripting/deploy.sh
 ```
 
-Expected successful flow:
-1. `build.sh` generates `build/site/index.html`.
-2. `test.sh` checks that the page exists and validates its title and configured message.
-3. `deploy.sh` runs the test and copies the page to `deployed/index.html` only when the test passes.
+Or run the full successful pipeline in one command:
+
+```bash
+bash labs/L05-shell-scripting/build.sh && \
+bash labs/L05-shell-scripting/test.sh && \
+bash labs/L05-shell-scripting/deploy.sh
+```
+
+If any stage fails, the `&&` chain stops and later stages do not run.
+
+## Completion check
+
+- [ ] I can describe what `config.sh`, `build.sh`, `test.sh`, and `deploy.sh` do.
+- [ ] I can change the page message in `config.sh` and rebuild the page.
+- [ ] I can add a test for the page message.
+- [ ] Deployment stops when the test fails.
+- [ ] I can explain what a non-zero exit code means.
