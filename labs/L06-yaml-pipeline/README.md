@@ -62,20 +62,8 @@ root folder. The `ci.yaml` file must be inside `.github/workflows/`.
 
 Do not create `ci.yaml` directly in the root folder.
 
-## 3. Create a GitHub repository
 
-1.  Open https://github.com and sign in.
-2.  Click the **+** icon in the top-right corner.
-3.  Select **New repository**.
-4.  Enter the repository name: `my-first-pipeline`.
-5.  Select **Public** or **Private**.
-6.  Leave the option to add a README unchecked for this exercise.
-7.  Click **Create repository**.
-
-Keep the newly created repository page open. You will use its URL in the
-next step.
-
-## 4. Clone the repository to your computer
+## 3. Clone the repository to your computer
 
 Open your terminal or Git Bash.
 
@@ -115,7 +103,7 @@ git branch
 
 The default branch will usually be `main`.
 
-## 5. Create a feature branch
+## 4. Create a feature branch
 
 A feature branch allows you to make changes without working directly on
 the `main` branch.
@@ -143,7 +131,7 @@ The asterisk indicates the branch you are currently working on.
 **Rule:** Always create a feature branch before making changes. Do not
 make your lab changes directly on `main`.
 
-## 6. Create the GitHub Actions workflow folders
+## 5. Create the GitHub Actions workflow folders
 
 You must create two folders: `.github` and `workflows`.
 
@@ -151,25 +139,13 @@ From the repository root, run:
 
 ``` bash
 mkdir -p .github/workflows
-```
-
-This command creates both folders if they do not already exist.
-
-Verify the folder structure:
-
-``` bash
 ls -la
-```
-
-To inspect the workflow directory:
-
-``` bash
 ls -la .github/workflows
 ```
 
 It will initially be empty.
 
-### Create the YAML file
+### 6 Create the YAML file
 
 Create a file named `ci.yaml` inside `.github/workflows/`:
 
@@ -186,18 +162,6 @@ my-first-pipeline/
         └── ci.yaml
 ```
 
-You can create the folders and file using VS Code instead if you prefer.
-
-In VS Code:
-
-1.  Open the `my-first-pipeline` folder.
-2.  Right-click the root folder and select **New Folder**.
-3.  Name it `.github`.
-4.  Right-click `.github` and create another folder named `workflows`.
-5.  Right-click `workflows` and select **New File**.
-6.  Name the file `ci.yaml`.
-
-Make sure the file is saved in the correct location.
 
 ## 7. Add the YAML pipeline code
 
@@ -317,27 +281,11 @@ files between jobs because it only prints messages.
 
 ## 8. Commit your changes
 
-Check the files Git can see:
 
 ``` bash
 git status
-```
-
-Stage your YAML file:
-
-``` bash
 git add .github/workflows/ci.yaml
-```
-
-Commit the change:
-
-``` bash
 git commit -m "Add beginner CI pipeline"
-```
-
-Check the status again:
-
-``` bash
 git status
 ```
 
