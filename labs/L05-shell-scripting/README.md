@@ -98,7 +98,7 @@ bash labs/L05-shell-scripting/build.sh
 At the top of `test.sh`, after `set -euo pipefail`, load the configuration:
 
 ```bash
-source labs/L05-shell-scripting/config.sh
+source config.sh
 ```
 
 Then add this check after the existing title check:
