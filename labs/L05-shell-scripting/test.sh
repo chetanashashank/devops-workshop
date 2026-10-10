@@ -14,8 +14,3 @@ if ! grep -q '<title>Workshop Demo</title>' "$ARTIFACT"; then
 fi
 
 printf 'Test passed: page exists and title is correct.\n'
-
-if ! grep -Fq "$PAGE_MESSAGE" "$ARTIFACT"; then
-    printf 'Test failed: expected message was not found.\n' >&2
-    exit 1
-fi

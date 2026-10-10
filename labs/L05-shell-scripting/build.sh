@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source labs/L05-shell-scripting/config.sh
+source config.sh
 
 OUTPUT_DIR="labs/L05-shell-scripting/build/site"
 PAGE_TITLE="Workshop Demo"
