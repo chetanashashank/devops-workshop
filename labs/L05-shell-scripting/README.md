@@ -72,8 +72,8 @@ bash labs/L05-shell-scripting/deploy.sh
 ## Student tasks
 
 1. Change `PAGE_MESSAGE` in `config.sh` and rebuild the HTML page.
-2. change the page title in test.sh so that the condition fails and test fails.
-3. Modify `deploy.sh` so deployment fails when the test fails. Test this by temporarily changing `PAGE_MESSAGE` in `config.sh` to a new value and deliberately making the expected message in `test.sh` incorrect. Run `deploy.sh` and confirm that the test fails and the deployment copy does not run. Restore the correct expected value afterward.
+2. Demonstrate a test failure, change title string in the existing title check in `test.sh` file**
+3. Modify `deploy.sh` so deployment fails when the test fails. 
 
 ## Answer guide (for reference)
 
@@ -118,9 +118,7 @@ Afterward, restore the title check to:
 
 This leaves the test validating the correct title and the configured page message.
 
-### Task 3 — Stop deployment when the test fails
-
-### Task 4 — Make deployment run the test first
+### Task 3 — Make deployment run the test first
 
 Modify `deploy.sh` to run `test.sh` **after checking that the build artifact exists but before creating the deployment directory or copying the file**.
 
