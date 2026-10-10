@@ -1,5 +1,0 @@
-10.0.0.11 - - [10/Oct/2026:10:00:01 +0000] "GET / HTTP/1.1" 200 512 "-" "StudentBrowser/1.0"
-10.0.0.12 - - [10/Oct/2026:10:00:02 +0000] "GET /health HTTP/1.1" 200 24 "-" "StudentBrowser/1.0"
-10.0.0.13 - - [10/Oct/2026:10:00:03 +0000] "GET /courses HTTP/1.1" 200 920 "-" "StudentBrowser/1.0"
-10.0.0.11 - - [10/Oct/2026:10:00:04 +0000] "POST /login HTTP/1.1" 500 103 "-" "StudentBrowser/1.0"
-10.0.0.14 - - [10/Oct/2026:10:00:05 +0000] "GET /favicon.ico HTTP/1.1" 404 48 "-" "StudentBrowser/1.0"
