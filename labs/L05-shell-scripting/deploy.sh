@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
-DESTINATION="labs/L05-shell-scripting/deployed"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ARTIFACT="${ARTIFACT:-$SCRIPT_DIR/build/site/index.html}"
+DESTINATION="${DESTINATION:-$SCRIPT_DIR/deployed}"
 
 if [[ ! -f "$ARTIFACT" ]]; then
-  printf 'Deploy failed: run build.sh first.\n' >&2
+  printf 'Deploy failed: %s not found. Run build.sh first.\n' "$ARTIFACT" >&2
   exit 1
 fi
 
-bash test.sh
+bash "$SCRIPT_DIR/test.sh"
 
 mkdir -p "$DESTINATION"
 cp "$ARTIFACT" "$DESTINATION/index.html"

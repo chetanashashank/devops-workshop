@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ARTIFACT="labs/L05-shell-scripting/build/site/index.html"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ARTIFACT="${ARTIFACT:-$SCRIPT_DIR/build/site/index.html}"
 
 if [[ ! -f "$ARTIFACT" ]]; then
-  printf 'Test failed: run build.sh first.\n' >&2
+  printf 'Test failed: %s not found. Run build.sh first.\n' "$ARTIFACT" >&2
   exit 1
 fi
 

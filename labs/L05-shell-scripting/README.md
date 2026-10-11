@@ -131,25 +131,6 @@ bash labs/L05-shell-scripting/test.sh
 Because `deploy.sh` uses `set -euo pipefail`, a failing test causes deployment to stop before the copy command.
 
 
-## Final execution order
-
-After restoring the correct test check, run these commands from the repository root:
-
-```bash
-bash labs/L05-shell-scripting/build.sh
-bash labs/L05-shell-scripting/test.sh
-bash labs/L05-shell-scripting/deploy.sh
-```
-
-Or run the full successful pipeline in one command:
-
-```bash
-bash labs/L05-shell-scripting/build.sh && \
-bash labs/L05-shell-scripting/test.sh && \
-bash labs/L05-shell-scripting/deploy.sh
-```
-
-If any stage fails, the `&&` chain stops and later stages do not run.
 
 ## Completion check
 
